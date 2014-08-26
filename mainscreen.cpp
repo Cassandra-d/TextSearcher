@@ -27,7 +27,12 @@ MainScreen::MainScreen(QWidget *parent) :
     connect(ui->recursiveCheckBox, SIGNAL(toggled(bool)), SLOT(setRecursiveSearch(bool)));
     connect(ui->searchButton, SIGNAL(clicked()), SLOT(searchButtonClicked()));
     connect(ui->findButton, SIGNAL(clicked()), SLOT(findButtonClicked()));
+
 	connect(ui->cancelTask, &QPushButton::clicked, &m_workersThreadsController, &WorkersThreadsController::terminateWork);
+	connect(ui->cancelTask, &QPushButton::clicked, [&]() {
+		ui->resultView->append(QLatin1String("Interrupted"));
+		hideProgress();
+	});
 
     ui->pathLabel->installEventFilter(this);
 	hideProgress();
@@ -156,6 +161,8 @@ void MainScreen::showProgress()
 
 void MainScreen::searchButtonClicked()
 {
+	m_workersThreadsController.terminateWork();
+
     ui->resultView->clear();
 
 	m_progress = 0;
@@ -194,6 +201,8 @@ void MainScreen::searchButtonClicked()
 
 void MainScreen::findButtonClicked()
 {
+	m_workersThreadsController.terminateWork();
+
     ui->resultView->clear();
 
 	m_progress = 0;

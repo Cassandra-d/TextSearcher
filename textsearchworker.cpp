@@ -25,7 +25,8 @@ void TextSearchWorker::startWork()
 	assert(dir.exists());
 
 	findInFilesRecurs(dir);
-	emit workDone();
+	if (!m_shouldBeInterrupted)
+		emit workDone();
 }
 
 void TextSearchWorker::setData(const QVariant &data)
@@ -49,9 +50,7 @@ void TextSearchWorker::setData(const QVariant &data)
 void TextSearchWorker::findInFiles(const QList<QFileInfo>& files)
 {
 	if (m_shouldBeInterrupted)
-	{
 		return;
-	}
 
 	foreach (QFileInfo fInfo, files)
 	{

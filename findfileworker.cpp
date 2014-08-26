@@ -30,7 +30,8 @@ void FindFileWorker::startWork()
 	assert(dir.exists());
 
 	findInDir(dir);
-	emit workDone();
+	if (!m_shouldBeInterrupted)
+		emit workDone();
 }
 
 void FindFileWorker::findInDir(const QDir &dir)
